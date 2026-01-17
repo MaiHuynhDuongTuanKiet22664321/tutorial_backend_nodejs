@@ -1,21 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 
 const userSchema = new Schema({
-    userName: {
+    username: {
         type: String,
         required: true,
         trim: true,
         lowercase: true,
         unique: true,
-        minlength: 3,
-        maxlength: 20,
     },
     password: {
         type: String,
         required: true,
         trim: true,
-        minlength: 6,
-        maxlength: 20,
     },
     email: {
         type: String,
@@ -23,8 +19,12 @@ const userSchema = new Schema({
         trim: true,
         lowercase: true,
         unique: true,
-        minlength: 3,
-        maxlength: 20,
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'user', 'moderator'],
+        default: 'user',
+        required: true
     },
 
 },

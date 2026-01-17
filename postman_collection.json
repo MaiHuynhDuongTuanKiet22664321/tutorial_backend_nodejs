@@ -1,0 +1,189 @@
+{
+  "info": {
+    "name": "User API Collection",
+    "description": "Collection for testing User endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000/api/v1/users",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Register User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userName\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["register"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["login"]
+        },
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "if (pm.response.code === 200) {",
+                "    const response = pm.response.json();",
+                "    pm.collectionVariables.set('accessToken', response.accessToken);",
+                "    console.log('Access token saved:', response.accessToken);",
+                "}"
+              ]
+            }
+          }
+        ]
+      },
+      "response": []
+    },
+    {
+      "name": "Get Profile (Protected)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["profile"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Profile (Protected)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userName\": \"updateduser\",\n  \"email\": \"updated@example.com\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["profile"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Account (Protected)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{accessToken}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/account",
+          "host": ["{{baseUrl}}"],
+          "path": ["account"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Test Invalid Token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer invalid_token_here"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["profile"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Test No Token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/profile",
+          "host": ["{{baseUrl}}"],
+          "path": ["profile"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
